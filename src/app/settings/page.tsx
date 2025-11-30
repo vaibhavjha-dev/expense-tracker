@@ -132,8 +132,8 @@ export default function SettingsPage() {
                             </div>
                         </div>
 
-                        <div className="grid gap-4 md:grid-cols-2">
-                            <div className="space-y-2">
+                        <div className="grid gap-4 grid-cols-2">
+                            <div className="space-y-2 col-span-2 md:col-span-1">
                                 <Label htmlFor="name">{t('name')}</Label>
                                 <Input
                                     id="name"
@@ -143,7 +143,7 @@ export default function SettingsPage() {
                                     disabled={!isEditing}
                                 />
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-2 col-span-2 md:col-span-1">
                                 <Label htmlFor="age">{t('age')}</Label>
                                 <Input
                                     id="age"
@@ -154,14 +154,14 @@ export default function SettingsPage() {
                                     disabled={!isEditing}
                                 />
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-2 col-span-1">
                                 <Label htmlFor="gender">{t('gender')}</Label>
                                 <Select
                                     value={formData.gender}
                                     onValueChange={(value) => setFormData({ ...formData, gender: value })}
                                     disabled={!isEditing}
                                 >
-                                    <SelectTrigger>
+                                    <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select gender" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -171,20 +171,21 @@ export default function SettingsPage() {
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-2 col-span-1">
                                 <Label htmlFor="language">{t('language')}</Label>
                                 <Select
                                     value={formData.language || 'en'}
                                     onValueChange={(value) => setFormData({ ...formData, language: value })}
                                     disabled={!isEditing}
                                 >
-                                    <SelectTrigger>
+                                    <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select language" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectItem value="en">English</SelectItem>
                                         <SelectItem value="es">Spanish</SelectItem>
                                         <SelectItem value="fr">French</SelectItem>
+                                        <SelectItem value="de">German</SelectItem>
                                         <SelectItem value="hi">Hindi</SelectItem>
                                     </SelectContent>
                                 </Select>
@@ -193,7 +194,17 @@ export default function SettingsPage() {
 
                         <div className="flex justify-end gap-2">
                             {isEditing ? (
-                                <Button onClick={handleSave}>{t('save')}</Button>
+                                <>
+                                    {profile.name && (
+                                        <Button variant="outline" onClick={() => {
+                                            setFormData(profile);
+                                            setIsEditing(false);
+                                        }}>
+                                            {t('cancel')}
+                                        </Button>
+                                    )}
+                                    <Button onClick={handleSave}>{t('save')}</Button>
+                                </>
                             ) : (
                                 <Button variant="outline" onClick={() => setIsEditing(true)}>
                                     {t('edit')}

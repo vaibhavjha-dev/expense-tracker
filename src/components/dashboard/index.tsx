@@ -36,7 +36,7 @@ export default function Dashboard() {
         </p>
       </div>
 
-      <div className="flex flex-1 flex-col gap-6 md:flex-row">
+      <div className="flex flex-1 flex-col gap-6 lg:flex-row">
         <div className="flex flex-1 flex-col gap-6">
           <SummaryCards />
           <div className="grid gap-6 xl:grid-cols-2">
@@ -44,7 +44,7 @@ export default function Dashboard() {
             <TransactionList />
           </div>
         </div>
-        <div className="w-full flex-shrink-0 md:w-[380px] lg:w-[420px]">
+        <div className="w-full flex-shrink-0 lg:w-[380px] xl:w-[420px]">
           <TransactionForm />
         </div>
       </div>

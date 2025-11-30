@@ -42,7 +42,7 @@ export default function SummaryCards() {
     ];
 
     return (
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             {cards.map((card, index) => (
                 <motion.div
                     key={card.title}

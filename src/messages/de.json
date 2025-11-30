@@ -1,0 +1,63 @@
+{
+    "Settings": {
+        "title": "Einstellungen",
+        "profile": "Profileinstellungen",
+        "manage": "Verwalten Sie Ihre persönlichen Daten",
+        "avatar": "Avatar",
+        "initials": "Generiert aus Ihren Namensinitialen",
+        "name": "Name",
+        "age": "Alter",
+        "gender": "Geschlecht",
+        "language": "Sprache",
+        "save": "Profil speichern",
+        "edit": "Profil bearbeiten",
+        "cancel": "Abbrechen",
+        "data": "Datenverwaltung",
+        "download": "Daten herunterladen",
+        "upload": "Daten hochladen",
+        "exportDesc": "Dies exportiert Ihre Transaktionen, Einstellungen und Profildaten in eine Textdatei. Das Hochladen einer Datei überschreibt Ihre aktuellen Daten."
+    },
+    "Dashboard": {
+        "greeting": {
+            "morning": "Guten Morgen",
+            "afternoon": "Guten Tag",
+            "evening": "Guten Abend"
+        },
+        "overview": "Überblick über Ihre finanziellen Aktivitäten",
+        "defaultUser": "Benutzer",
+        "summary": {
+            "balance": "Gesamtsaldo",
+            "income": "Einnahmen",
+            "expenses": "Ausgaben"
+        },
+        "recentTransactions": "Letzte Transaktionen",
+        "noTransactions": "Noch keine Transaktionen.",
+        "addTransaction": {
+            "title": "Transaktion hinzufügen",
+            "income": "Einnahme",
+            "expense": "Ausgabe",
+            "date": "Datum",
+            "amount": "Betrag",
+            "description": "Beschreibung",
+            "category": "Kategorie",
+            "selectCategory": "Kategorie wählen",
+            "submit": "Transaktion hinzufügen",
+            "error": "Bitte füllen Sie alle Felder aus",
+            "success": "Transaktion erfolgreich hinzugefügt"
+        },
+        "chart": {
+            "title": "Ausgabenaufschlüsselung",
+            "noData": "Keine Ausgaben anzuzeigen"
+        },
+        "download": {
+            "button": "Bericht herunterladen",
+            "title": "Ausgabenbericht herunterladen",
+            "description": "Wählen Sie einen Datumsbereich, um den Bericht zu filtern. Lassen Sie es leer, um alle Transaktionen herunterzuladen.",
+            "startDate": "Startdatum",
+            "endDate": "Enddatum",
+            "submit": "PDF herunterladen",
+            "error": "Keine Transaktionen für den ausgewählten Datumsbereich gefunden",
+            "success": "Bericht erfolgreich heruntergeladen"
+        }
+    }
+}
