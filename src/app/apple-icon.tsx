@@ -50,12 +50,28 @@ export default function Icon() {
                     />
 
                     {/* Coin */}
-                    <circle
-                        cx="22"
-                        cy="16"
-                        r="2.5"
-                        fill="#facc15"
-                    />
+                    <g>
+                        <circle
+                            cx="22"
+                            cy="16"
+                            r="3"
+                            fill="#facc15"
+                        />
+                        <text
+                            x="22"
+                            y="16"
+                            dy="1.5"
+                            textAnchor="middle"
+                            fontSize="4.5"
+                            fontWeight="bold"
+                            fill="#713f12"
+                            style={{
+                                fontFamily: 'sans-serif',
+                            }}
+                        >
+                            ₹
+                        </text>
+                    </g>
                 </svg>
             </div>
         ),
