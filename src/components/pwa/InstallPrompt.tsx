@@ -83,7 +83,7 @@ export function InstallPrompt() {
                 <div className="flex items-start justify-between">
                     <div className="flex gap-3">
                         <div className="h-10 w-10 bg-transparent rounded-lg flex items-center justify-center shrink-0 overflow-hidden">
-                            <img src="/icon-192" alt="App Icon" className="h-full w-full object-contain" />
+                            <img src="/icon.svg" alt="App Icon" className="h-full w-full object-contain" />
                         </div>
                         <div>
                             <h3 className="font-semibold text-zinc-900 dark:text-zinc-100">Install App</h3>

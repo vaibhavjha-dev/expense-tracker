@@ -76,7 +76,9 @@ export default function SettingsPage() {
                 if (data.profile) localStorage.setItem("profile", data.profile);
 
                 toast.success("Data uploaded successfully. Reloading...");
-                setTimeout(() => window.location.reload(), 1500);
+                setTimeout(() => {
+                    window.location.href = "/";
+                }, 1500);
             } catch (error) {
                 console.error(error);
                 toast.error("Failed to parse file");
