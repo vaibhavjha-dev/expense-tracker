@@ -37,27 +37,36 @@ export default function DownloadOptions({ transactions, className }: DownloadOpt
     const handleDownload = () => {
         let filtered = transactions;
 
-        if (startDate || endDate) {
-            const start = startDate ? new Date(startDate) : new Date(0); // Beginning of time if no start date
-            const end = endDate ? new Date(endDate) : new Date(); // Now if no end date
+        // Determine effective dates
+        let start = startDate ? new Date(startDate) : null;
+        let end = endDate ? new Date(endDate) : new Date();
 
-            // Adjust end date to include the full day
-            if (endDate) {
-                end.setHours(23, 59, 59, 999);
+        if (!start) {
+            if (transactions.length > 0) {
+                start = transactions.reduce((min, t) => {
+                    const d = new Date(t.date);
+                    return d < min ? d : min;
+                }, new Date(transactions[0].date));
+            } else {
+                start = new Date(0); // Fallback if no transactions
             }
-
-            filtered = transactions.filter((t) => {
-                const tDate = new Date(t.date);
-                return tDate >= start && tDate <= end;
-            });
         }
+
+        // Set times for accurate comparison
+        start.setHours(0, 0, 0, 0);
+        end.setHours(23, 59, 59, 999);
+
+        filtered = transactions.filter((t) => {
+            const tDate = new Date(t.date);
+            return tDate >= start! && tDate <= end;
+        });
 
         if (filtered.length === 0) {
             toast.error(t('error'));
             return;
         }
 
-        generatePDF(filtered);
+        generatePDF(filtered, start.toISOString(), end.toISOString());
         setIsOpen(false);
         toast.success(t('success'));
     };

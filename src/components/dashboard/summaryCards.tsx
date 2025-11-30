@@ -5,17 +5,11 @@ import { ArrowDownIcon, ArrowUpIcon, WalletIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslations } from "next-intl";
+import { formatCurrency } from "@/lib/utils";
 
 export default function SummaryCards() {
     const t = useTranslations('Dashboard.summary');
     const { balance, income, expenses } = useTransactions();
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat("in-IN", {
-            style: "currency",
-            currency: "INR",
-        }).format(amount);
-    };
 
     const cards = [
         {

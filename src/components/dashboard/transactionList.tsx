@@ -7,6 +7,7 @@ import { Trash2Icon, TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
+import { formatCurrency } from "@/lib/utils";
 
 export default function TransactionList() {
     const t = useTranslations('Dashboard');
@@ -75,8 +76,7 @@ export default function TransactionList() {
                                             : "text-red-600 dark:text-red-500"
                                             }`}
                                     >
-                                        {transaction.type === "income" ? "+" : "-"}₹
-                                        {transaction.amount.toFixed(2)}
+                                        {transaction.type === "income" ? "+" : "-"}{formatCurrency(transaction.amount)}
                                     </span>
                                     <Button
                                         variant="ghost"

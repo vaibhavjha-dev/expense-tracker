@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslations } from "next-intl";
+import { formatCurrency } from "@/lib/utils";
 
 export default function OverviewChart() {
     const t = useTranslations('Dashboard');
@@ -79,6 +80,7 @@ export default function OverviewChart() {
                                 ))}
                             </Pie>
                             <Tooltip
+                                formatter={(value: number) => formatCurrency(value)}
                                 contentStyle={{
                                     backgroundColor: "rgba(255, 255, 255, 0.8)",
                                     borderRadius: "8px",

@@ -2,8 +2,9 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Transaction } from "./types";
 import { format } from "date-fns";
+import { formatIndianNumber } from "./utils";
 
-export const generatePDF = (transactions: Transaction[]) => {
+export const generatePDF = (transactions: Transaction[], startDate?: string, endDate?: string) => {
     const doc = new jsPDF();
 
     // Calculate totals
@@ -25,13 +26,20 @@ export const generatePDF = (transactions: Transaction[]) => {
     doc.setFontSize(10);
     doc.text(`Generated on: ${format(new Date(), "PPP")}`, 14, 30);
 
+    // Add Date Range if present
+    if (startDate || endDate) {
+        const start = startDate ? format(new Date(startDate), "PPP") : "Beginning";
+        const end = endDate ? format(new Date(endDate), "PPP") : "Now";
+        doc.text(`Date Range: ${start} - ${end}`, 14, 36);
+    }
+
     // Add Summary
     doc.setFontSize(12);
-    doc.text("Summary", 14, 40);
+    doc.text("Summary", 14, 45);
     doc.setFontSize(10);
-    doc.text(`Total Income: Rs. ${income.toFixed(2)}`, 14, 48);
-    doc.text(`Total Expenses: Rs. ${expenses.toFixed(2)}`, 14, 54);
-    doc.text(`Net Balance: Rs. ${balance.toFixed(2)}`, 14, 60);
+    doc.text(`Total Income: Rs. ${formatIndianNumber(income)}`, 14, 53);
+    doc.text(`Total Expenses: Rs. ${formatIndianNumber(expenses)}`, 14, 59);
+    doc.text(`Net Balance: Rs. ${formatIndianNumber(balance)}`, 14, 65);
 
     // Define table columns
     const tableColumn = ["Date", "Description", "Category", "Type", "Amount"];
@@ -42,14 +50,14 @@ export const generatePDF = (transactions: Transaction[]) => {
         transaction.description,
         transaction.category.charAt(0).toUpperCase() + transaction.category.slice(1),
         transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1),
-        `${transaction.type === "income" ? "+" : "-"}Rs. ${transaction.amount.toFixed(2)}`,
+        `${transaction.type === "income" ? "+" : "-"}Rs. ${formatIndianNumber(transaction.amount)}`,
     ]);
 
     // Generate table
     autoTable(doc, {
         head: [tableColumn],
         body: tableRows,
-        startY: 65,
+        startY: 75,
         theme: "grid",
         styles: {
             fontSize: 10,
