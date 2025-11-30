@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/ui/logo";
 
@@ -11,13 +12,19 @@ export default function SplashScreen({
 }) {
     const [show, setShow] = useState(true);
 
+    const router = useRouter();
+
     useEffect(() => {
         // Hide splash screen after 3 seconds
         const timer = setTimeout(() => {
             setShow(false);
+            const profile = localStorage.getItem("profile");
+            if (!profile) {
+                router.push("/settings");
+            }
         }, 3000);
         return () => clearTimeout(timer);
-    }, []);
+    }, [router]);
 
     const text = "Expense Tracker";
     const letters = text.split("");

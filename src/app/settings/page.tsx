@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Header from "@/components/layout/header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -10,10 +10,38 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useProfile } from "@/hooks/use-profile";
 import { Download, Upload, User } from "lucide-react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function SettingsPage() {
     const { profile, updateProfile, loading } = useProfile();
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [formData, setFormData] = useState(profile);
+    const router = useRouter();
+
+    useEffect(() => {
+        if (!loading) {
+            setFormData(profile);
+            if (!profile.name) {
+                setIsEditing(true);
+            }
+        }
+    }, [profile, loading]);
+
+    const handleSave = () => {
+        if (!formData.name || !formData.age || !formData.gender) {
+            toast.error("Please fill all fields");
+            return;
+        }
+        updateProfile(formData);
+        setIsEditing(false);
+        toast.success("Profile saved");
+
+        // If this was a new profile setup, we can offer to go to dashboard
+        if (!profile.name) {
+            router.push("/");
+        }
+    };
 
     const handleDownload = () => {
         const data = {
@@ -83,7 +111,7 @@ export default function SettingsPage() {
                     <CardContent className="space-y-6">
                         <div className="flex items-center gap-6">
                             <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground text-2xl font-bold overflow-hidden">
-                                {profile.name ? getInitials(profile.name) : <User className="h-10 w-10" />}
+                                {formData.name ? getInitials(formData.name) : <User className="h-10 w-10" />}
                             </div>
                             <div className="space-y-1">
                                 <h3 className="font-medium">Avatar</h3>
@@ -98,9 +126,10 @@ export default function SettingsPage() {
                                 <Label htmlFor="name">Name</Label>
                                 <Input
                                     id="name"
-                                    value={profile.name}
-                                    onChange={(e) => updateProfile({ ...profile, name: e.target.value })}
+                                    value={formData.name}
+                                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     placeholder="Enter your name"
+                                    disabled={!isEditing}
                                 />
                             </div>
                             <div className="space-y-2">
@@ -108,16 +137,18 @@ export default function SettingsPage() {
                                 <Input
                                     id="age"
                                     type="number"
-                                    value={profile.age}
-                                    onChange={(e) => updateProfile({ ...profile, age: e.target.value })}
+                                    value={formData.age}
+                                    onChange={(e) => setFormData({ ...formData, age: e.target.value })}
                                     placeholder="Enter your age"
+                                    disabled={!isEditing}
                                 />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="gender">Gender</Label>
                                 <Select
-                                    value={profile.gender}
-                                    onValueChange={(value) => updateProfile({ ...profile, gender: value })}
+                                    value={formData.gender}
+                                    onValueChange={(value) => setFormData({ ...formData, gender: value })}
+                                    disabled={!isEditing}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select gender" />
@@ -129,6 +160,16 @@ export default function SettingsPage() {
                                     </SelectContent>
                                 </Select>
                             </div>
+                        </div>
+
+                        <div className="flex justify-end gap-2">
+                            {isEditing ? (
+                                <Button onClick={handleSave}>Save Profile</Button>
+                            ) : (
+                                <Button variant="outline" onClick={() => setIsEditing(true)}>
+                                    Edit Profile
+                                </Button>
+                            )}
                         </div>
                     </CardContent>
                 </Card>
