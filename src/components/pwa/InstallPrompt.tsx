@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X } from "lucide-react";
+import { X, Share, PlusSquare, MoreVertical } from "lucide-react";
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -11,8 +11,30 @@ interface BeforeInstallPromptEvent extends Event {
 export function InstallPrompt() {
     const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const [isVisible, setIsVisible] = useState(false);
+    const [isIOS, setIsIOS] = useState(false);
+    const [isAndroid, setIsAndroid] = useState(false);
 
     useEffect(() => {
+        // Check device type
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        const isIosDevice = /iphone|ipad|ipod/.test(userAgent);
+        const isAndroidDevice = /android/.test(userAgent);
+
+        // Check if already in standalone mode (installed)
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
+            (window.navigator as any).standalone === true;
+
+        if (isStandalone) return;
+
+        if (isIosDevice) {
+            setIsIOS(true);
+            setTimeout(() => setIsVisible(true), 1000);
+        } else if (isAndroidDevice) {
+            setIsAndroid(true);
+            // Show prompt for Android users as well, in case the native event doesn't fire
+            setTimeout(() => setIsVisible(true), 1000);
+        }
+
         const handleBeforeInstallPrompt = (e: Event) => {
             // Prevent the mini-infobar from appearing on mobile
             e.preventDefault();
@@ -66,7 +88,10 @@ export function InstallPrompt() {
                         <div>
                             <h3 className="font-semibold text-zinc-900 dark:text-zinc-100">Install App</h3>
                             <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                                Install Expense Tracker for a better experience
+                                {isIOS || (isAndroid && !deferredPrompt)
+                                    ? "Install Expense Tracker to your home screen"
+                                    : "Install Expense Tracker for a better experience"
+                                }
                             </p>
                         </div>
                     </div>
@@ -77,20 +102,45 @@ export function InstallPrompt() {
                         <X size={20} />
                     </button>
                 </div>
-                <div className="flex gap-2 justify-end">
-                    <button
-                        onClick={handleClose}
-                        className="px-3 py-1.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors"
-                    >
-                        Not now
-                    </button>
-                    <button
-                        onClick={handleInstallClick}
-                        className="px-3 py-1.5 text-sm font-medium text-white bg-black dark:bg-white dark:text-black rounded-md hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
-                    >
-                        Install
-                    </button>
-                </div>
+
+                {isIOS ? (
+                    <div className="flex flex-col gap-2 text-sm text-zinc-600 dark:text-zinc-400 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+                        <div className="flex items-center gap-2">
+                            <span className="flex items-center justify-center w-6 h-6 bg-zinc-100 dark:bg-zinc-800 rounded-md">1</span>
+                            <span>Tap the <Share className="inline h-4 w-4 mx-1" /> share button</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="flex items-center justify-center w-6 h-6 bg-zinc-100 dark:bg-zinc-800 rounded-md">2</span>
+                            <span>Select <span className="font-medium text-zinc-900 dark:text-zinc-200">Add to Home Screen</span> <PlusSquare className="inline h-4 w-4 mx-1" /></span>
+                        </div>
+                    </div>
+                ) : isAndroid && !deferredPrompt ? (
+                    <div className="flex flex-col gap-2 text-sm text-zinc-600 dark:text-zinc-400 pt-2 border-t border-zinc-100 dark:border-zinc-800">
+                        <div className="flex items-center gap-2">
+                            <span className="flex items-center justify-center w-6 h-6 bg-zinc-100 dark:bg-zinc-800 rounded-md">1</span>
+                            <span>Tap the <MoreVertical className="inline h-4 w-4 mx-1" /> menu button</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="flex items-center justify-center w-6 h-6 bg-zinc-100 dark:bg-zinc-800 rounded-md">2</span>
+                            <span>Select <span className="font-medium text-zinc-900 dark:text-zinc-200">Install App</span> <PlusSquare className="inline h-4 w-4 mx-1" /></span>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="flex gap-2 justify-end">
+                        <button
+                            onClick={handleClose}
+                            className="px-3 py-1.5 text-sm font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-md transition-colors"
+                        >
+                            Not now
+                        </button>
+                        <button
+                            onClick={handleInstallClick}
+                            className="px-3 py-1.5 text-sm font-medium text-white bg-black dark:bg-white dark:text-black rounded-md hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors"
+                        >
+                            Install
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
