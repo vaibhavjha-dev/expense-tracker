@@ -23,7 +23,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex flex-col space-y-6 px-4">
+    <div className="flex flex-col space-y-6">
       <div className="flex-shrink-0 space-y-1">
         <div className="flex items-start justify-between gap-4 sm:items-center">
           <h2 className="text-3xl font-bold tracking-tight">
