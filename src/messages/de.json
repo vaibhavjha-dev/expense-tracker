@@ -54,7 +54,8 @@
         },
         "chart": {
             "title": "Ausgabenaufschlüsselung",
-            "noData": "Keine Ausgaben anzuzeigen"
+            "noData": "Keine Ausgaben anzuzeigen",
+            "balance": "Saldo"
         },
         "download": {
             "button": "Bericht herunterladen",

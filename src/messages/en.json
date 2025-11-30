@@ -54,7 +54,8 @@
         },
         "chart": {
             "title": "Expense Breakdown",
-            "noData": "No expenses to show"
+            "noData": "No expenses to show",
+            "balance": "Balance"
         },
         "download": {
             "button": "Download Report",

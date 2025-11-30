@@ -9,13 +9,13 @@ import {
     ResponsiveContainer,
     Tooltip,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslations } from "next-intl";
 import { formatCurrency } from "@/lib/utils";
 
 export default function OverviewChart() {
     const t = useTranslations('Dashboard');
-    const { transactions } = useTransactions();
+    const { transactions, balance } = useTransactions();
 
     const expenseData = transactions
         .filter((t) => t.type === "expense")
@@ -58,6 +58,11 @@ export default function OverviewChart() {
         <Card className="h-[400px]">
             <CardHeader>
                 <CardTitle>{t('chart.title')}</CardTitle>
+                <CardAction>
+                    <div className="text-sm font-medium text-muted-foreground">
+                        {t('chart.balance')}: <span className="text-foreground">{formatCurrency(balance)}</span>
+                    </div>
+                </CardAction>
             </CardHeader>
             <CardContent>
                 <div className="h-[300px] w-full">

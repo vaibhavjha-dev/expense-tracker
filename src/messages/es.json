@@ -31,6 +31,8 @@
             "expenses": "Gastos"
         },
         "recentTransactions": "Transacciones recientes",
+        "editList": "Editar",
+        "doneList": "Listo",
         "noTransactions": "No hay transacciones todavía.",
         "addTransaction": {
             "title": "Añadir transacción",
@@ -45,9 +47,15 @@
             "error": "Por favor complete todos los campos",
             "success": "Transacción añadida con éxito"
         },
+        "editTransaction": {
+            "title": "Editar transacción",
+            "save": "Guardar cambios",
+            "success": "Transacción actualizada con éxito"
+        },
         "chart": {
             "title": "Desglose de gastos",
-            "noData": "No hay gastos para mostrar"
+            "noData": "No hay gastos para mostrar",
+            "balance": "Saldo"
         },
         "download": {
             "button": "Descargar informe",
