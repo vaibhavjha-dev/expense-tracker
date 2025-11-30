@@ -6,6 +6,7 @@ import { Transaction } from "./types";
 interface TransactionContextType {
     transactions: Transaction[];
     addTransaction: (transaction: Omit<Transaction, "id">) => void;
+    editTransaction: (id: string, transaction: Omit<Transaction, "id">) => void;
     deleteTransaction: (id: string) => void;
     balance: number;
     income: number;
@@ -44,6 +45,12 @@ export function TransactionProvider({ children }: { children: React.ReactNode })
         setTransactions((prev) => [newTransaction, ...prev]);
     };
 
+    const editTransaction = (id: string, updatedTransaction: Omit<Transaction, "id">) => {
+        setTransactions((prev) =>
+            prev.map((t) => (t.id === id ? { ...updatedTransaction, id } : t))
+        );
+    };
+
     const deleteTransaction = (id: string) => {
         setTransactions((prev) => prev.filter((t) => t.id !== id));
     };
@@ -63,6 +70,7 @@ export function TransactionProvider({ children }: { children: React.ReactNode })
             value={{
                 transactions,
                 addTransaction,
+                editTransaction,
                 deleteTransaction,
                 balance,
                 income,

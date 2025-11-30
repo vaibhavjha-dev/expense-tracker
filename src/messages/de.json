@@ -31,6 +31,8 @@
             "expenses": "Ausgaben"
         },
         "recentTransactions": "Letzte Transaktionen",
+        "editList": "Bearbeiten",
+        "doneList": "Fertig",
         "noTransactions": "Noch keine Transaktionen.",
         "addTransaction": {
             "title": "Transaktion hinzufügen",
@@ -44,6 +46,11 @@
             "submit": "Transaktion hinzufügen",
             "error": "Bitte füllen Sie alle Felder aus",
             "success": "Transaktion erfolgreich hinzugefügt"
+        },
+        "editTransaction": {
+            "title": "Transaktion bearbeiten",
+            "save": "Änderungen speichern",
+            "success": "Transaktion erfolgreich aktualisiert"
         },
         "chart": {
             "title": "Ausgabenaufschlüsselung",

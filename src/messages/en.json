@@ -31,6 +31,8 @@
             "expenses": "Expenses"
         },
         "recentTransactions": "Recent Transactions",
+        "editList": "Edit",
+        "doneList": "Done",
         "noTransactions": "No transactions yet.",
         "addTransaction": {
             "title": "Add Transaction",
@@ -44,6 +46,11 @@
             "submit": "Add Transaction",
             "error": "Please fill in all fields",
             "success": "Transaction added successfully"
+        },
+        "editTransaction": {
+            "title": "Edit Transaction",
+            "save": "Save Changes",
+            "success": "Transaction updated successfully"
         },
         "chart": {
             "title": "Expense Breakdown",
