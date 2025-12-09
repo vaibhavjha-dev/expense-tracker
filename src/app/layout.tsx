@@ -22,6 +22,11 @@ export const metadata: Metadata = {
   title: "Expense Tracker",
   description: "A simple expense tracker app built with Next.js.",
   manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Expense Tracker",
+  },
 };
 
 export const viewport: Viewport = {
