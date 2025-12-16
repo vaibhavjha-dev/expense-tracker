@@ -56,9 +56,9 @@ export default async function RootLayout({
               {children}
             </SplashScreen>
             <Toaster position="top-center" />
-            {/* <InstallPrompt /> */}
+            <InstallPrompt />
             <UpdatePrompt />
-            <ChatWidget />
+            <ChatWidget isOffline={!process.env.GOOGLE_GENERATIVE_AI_API_KEY} />
           </Providers>
         </NextIntlClientProvider>
       </body>

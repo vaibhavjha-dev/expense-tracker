@@ -15,7 +15,7 @@ interface Message {
     content: string;
 }
 
-export function ChatWidget() {
+export function ChatWidget({ isOffline = false }: { isOffline?: boolean }) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -65,6 +65,16 @@ export function ChatWidget() {
 
         setMessages((m) => [...m, userMessage]);
         setInput("");
+
+        if (isOffline) {
+            setMessages((m) => [...m, {
+                id: crypto.randomUUID(),
+                role: "assistant",
+                content: "Chatbot is offline"
+            }]);
+            return;
+        }
+
         setIsLoading(true);
 
         const response = await fetch("/api/chat", {
@@ -94,8 +104,6 @@ export function ChatWidget() {
                 )
             );
         }
-
-        setIsLoading(false);
 
         // 🔥 COMMAND EXECUTION
         try {
@@ -145,7 +153,7 @@ export function ChatWidget() {
     };
 
     return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
+        <div className="fixed bottom-6 right-6 z-20 flex flex-col items-end gap-4">
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -163,8 +171,17 @@ export function ChatWidget() {
                                     <div className="flex flex-col">
                                         <span className="font-semibold text-sm">Finance Assistant</span>
                                         <span className="text-xs text-muted-foreground flex items-center gap-1">
-                                            <Sparkles className="h-3 w-3 text-yellow-500" />
-                                            Online
+                                            {isOffline ? (
+                                                <>
+                                                    <div className="h-2 w-2 rounded-full bg-red-500" />
+                                                    Offline
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <Sparkles className="h-3 w-3 text-yellow-500" />
+                                                    Online
+                                                </>
+                                            )}
                                         </span>
                                     </div>
                                 </div>
