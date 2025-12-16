@@ -4,15 +4,15 @@ import { google } from "@ai-sdk/google";
 export const runtime = "edge";
 
 export async function POST(req: Request) {
-    const { messages } = await req.json();
+  const { messages } = await req.json();
 
-    const result = await streamText({
-        model: google("gemini-2.5-flash"),
-        temperature: 0,
-        messages: [
-            {
-                role: "system",
-                content: `
+  const result = await streamText({
+    model: google("gemini-2.5-flash-lite"),
+    temperature: 0,
+    messages: [
+      {
+        role: "system",
+        content: `
 You are an expense tracker assistant.
 
 RULES:
@@ -39,10 +39,10 @@ If the user is just chatting, respond with:
   "message": "string"
 }
         `,
-            },
-            ...messages,
-        ],
-    });
+      },
+      ...messages,
+    ],
+  });
 
-    return result.toTextStreamResponse();
+  return result.toTextStreamResponse();
 }
