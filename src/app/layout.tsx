@@ -7,6 +7,7 @@ import SplashScreen from "@/components/splash-screen";
 
 import { InstallPrompt } from "@/components/pwa/InstallPrompt";
 import { UpdatePrompt } from "@/components/pwa/UpdatePrompt";
+import { ChatWidget } from "@/components/chat/chat-widget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,8 +56,9 @@ export default async function RootLayout({
               {children}
             </SplashScreen>
             <Toaster position="top-center" />
-            <InstallPrompt />
+            {/* <InstallPrompt /> */}
             <UpdatePrompt />
+            <ChatWidget />
           </Providers>
         </NextIntlClientProvider>
       </body>
