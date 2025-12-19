@@ -150,6 +150,7 @@ export function ChatWidget({ isOffline = false }: { isOffline?: boolean }) {
         } catch {
             // normal chat fallback
         }
+        setIsLoading(false);
     };
 
     return (
