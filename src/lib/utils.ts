@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatCurrency(amount: number) {
-  return new Intl.NumberFormat("in-IN", {
+  return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
     maximumFractionDigits: 2,
@@ -14,7 +14,7 @@ export function formatCurrency(amount: number) {
 }
 
 export function formatIndianNumber(amount: number) {
-  return new Intl.NumberFormat("in-IN", {
+  return new Intl.NumberFormat("en-IN", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(amount);
