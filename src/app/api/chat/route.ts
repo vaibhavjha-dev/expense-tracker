@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   const { messages } = await req.json();
 
   const result = await streamText({
-    model: google("gemini-2.5-flash-lite"),
+    model: google("gemini-2.5-flash"),
     temperature: 0,
     messages: [
       {
@@ -21,10 +21,15 @@ ALLOWED CATEGORIES:
 - Expense: "food", "transport", "housing", "utilities", "entertainment", "health", "shopping", "travel", "recreational", "other"
 
 RULES:
-- If the user wants to add a transaction, respond ONLY with JSON.
+- You are a helpful assistant that MUST remember previous context.
+- When parsing user input, ALWAYS check the conversation history for previous incomplete requests.
+- If the user provides a missing detail (e.g., "500") in response to a question you asked, COMBINE it with the previous context (e.g., "add lunch") to create a full transaction.
+- Both 'amount' and 'description' are MANDATORY for adding a transaction.
+- If the user tries to add a transaction but is missing the amount or description, do NOT return "add_transaction". Instead, return "chat" and ask for the missing details.
+- If the user wants to add a transaction request and has provided all mandatory details (either in the current message or via context), respond ONLY with JSON.
 - Do NOT include markdown.
 - Do NOT explain anything.
-- Use this exact schema:
+- Use this exact schema for valid transactions:
 
 {
   "action": "add_transaction",
