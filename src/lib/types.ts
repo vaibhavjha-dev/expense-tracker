@@ -11,5 +11,5 @@ export interface Transaction {
 
 export const CATEGORIES = {
     income: ['salary', 'freelance', 'investments', 'other'],
-    expense: ['food', 'transport', 'housing', 'utilities', 'entertainment', 'health', 'shopping', 'other'],
+    expense: ['food', 'transport', 'housing', 'utilities', 'entertainment', 'health', 'shopping', 'travel', 'recreational', 'other'],
 };
