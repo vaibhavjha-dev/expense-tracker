@@ -4,24 +4,40 @@ import { useTransactions } from "@/lib/context";
 import { format } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import { formatCurrency } from "@/lib/utils";
 import { useState } from "react";
-import { CheckIcon, PencilIcon, Trash2Icon, TrendingDownIcon, TrendingUpIcon, X } from "lucide-react";
+import { TrendingDownIcon, TrendingUpIcon } from "lucide-react";
 import EditTransactionDialog from "./editTransactionDialog";
+import ViewTransactionDialog from "./viewTransactionDialog";
 import { Transaction } from "@/lib/types";
 
 export default function TransactionList() {
     const t = useTranslations('Dashboard');
     const { transactions, deleteTransaction } = useTransactions();
+
+    // Edit Dialog State
     const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-    const [isEditMode, setIsEditMode] = useState(false);
 
-    const handleEditClick = (transaction: Transaction) => {
+    // View Dialog State
+    const [viewingTransaction, setViewingTransaction] = useState<Transaction | null>(null);
+    const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+
+    const handleRowClick = (transaction: Transaction) => {
+        setViewingTransaction(transaction);
+        setIsViewDialogOpen(true);
+    };
+
+    const handleEditFromView = (transaction: Transaction) => {
+        setIsViewDialogOpen(false);
         setEditingTransaction(transaction);
         setIsEditDialogOpen(true);
+    };
+
+    const handleDeleteFromView = (id: string) => {
+        deleteTransaction(id);
+        setIsViewDialogOpen(false);
     };
 
     if (transactions.length === 0) {
@@ -36,14 +52,6 @@ export default function TransactionList() {
         <Card className="h-full">
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>{t('recentTransactions')}</CardTitle>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setIsEditMode(!isEditMode)}
-                    className="text-muted-foreground hover:text-primary"
-                >
-                    {isEditMode ? <CheckIcon className="h-5 w-5" /> : <PencilIcon className="h-5 w-5" />}
-                </Button>
             </CardHeader>
             <CardContent className="p-0">
                 <div className="max-h-[400px] overflow-y-auto p-4 pt-0 scrollbar-thin">
@@ -55,7 +63,8 @@ export default function TransactionList() {
                                 whileInView={{ opacity: 1, height: "auto" }}
                                 viewport={{ once: true }}
                                 exit={{ opacity: 0, height: 0 }}
-                                className="mb-3 flex items-center justify-between rounded-lg border p-3 last:mb-0"
+                                onClick={() => handleRowClick(transaction)}
+                                className="mb-3 flex items-center justify-between rounded-lg border p-3 last:mb-0 cursor-pointer hover:bg-muted/50 transition-colors"
                             >
                                 <div className="flex items-center gap-3">
                                     <motion.div
@@ -97,32 +106,21 @@ export default function TransactionList() {
                                     >
                                         {transaction.type === "income" ? "+" : "-"}{formatCurrency(transaction.amount)}
                                     </span>
-                                    {isEditMode && (
-                                        <div className="flex items-center">
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                onClick={() => handleEditClick(transaction)}
-                                                className="h-8 w-8 text-muted-foreground hover:text-primary"
-                                            >
-                                                <PencilIcon className="h-4 w-4" />
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                onClick={() => deleteTransaction(transaction.id)}
-                                                className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                                            >
-                                                <X className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    )}
                                 </div>
                             </motion.div>
                         ))}
                     </AnimatePresence>
                 </div>
             </CardContent>
+
+            <ViewTransactionDialog
+                transaction={viewingTransaction}
+                open={isViewDialogOpen}
+                onOpenChange={setIsViewDialogOpen}
+                onEdit={handleEditFromView}
+                onDelete={handleDeleteFromView}
+            />
+
             <EditTransactionDialog
                 transaction={editingTransaction}
                 open={isEditDialogOpen}

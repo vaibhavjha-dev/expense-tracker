@@ -31,6 +31,11 @@
             "expenses": "Dépenses"
         },
         "recentTransactions": "Transactions récentes",
+        "viewTransaction": {
+            "title": "Détails de la transaction",
+            "edit": "Modifier",
+            "delete": "Supprimer"
+        },
         "editList": "Modifier",
         "doneList": "Terminé",
         "noTransactions": "Pas encore de transactions.",

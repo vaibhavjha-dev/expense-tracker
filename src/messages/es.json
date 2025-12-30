@@ -31,6 +31,11 @@
             "expenses": "Gastos"
         },
         "recentTransactions": "Transacciones recientes",
+        "viewTransaction": {
+            "title": "Detalles de la transacción",
+            "edit": "Editar",
+            "delete": "Eliminar"
+        },
         "editList": "Editar",
         "doneList": "Listo",
         "noTransactions": "No hay transacciones todavía.",

@@ -31,6 +31,11 @@
             "expenses": "व्यय"
         },
         "recentTransactions": "हाल के लेनदेन",
+        "viewTransaction": {
+            "title": "लेनदेन का विवरण",
+            "edit": "संपादित करें",
+            "delete": "हटाएं"
+        },
         "editList": "संपादित करें",
         "doneList": "हो गया",
         "noTransactions": "अभी तक कोई लेनदेन नहीं।",
