@@ -52,6 +52,15 @@ export function InstallPrompt() {
         };
     }, []);
 
+    useEffect(() => {
+        if (isVisible) {
+            const timer = setTimeout(() => {
+                setIsVisible(false);
+            }, 7000);
+            return () => clearTimeout(timer);
+        }
+    }, [isVisible]);
+
     const handleInstallClick = async () => {
         if (!deferredPrompt) return;
 
