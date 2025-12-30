@@ -2,7 +2,7 @@
 
 A sleek, modern, and feature-packed **Expense Tracker** built with **Next.js** to help you stay in control of your finances. Track spending, visualize trends, and manage your money with an intuitive interface designed for all devices.
 
-**Live App:** https://xpnstrack.vercel.app/
+**Live App:** https://exptrack.vaibhavjha.dev/
 
 ---
 
