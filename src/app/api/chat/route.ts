@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   const { messages, data } = await req.json();
 
   const recentTransactions = data?.transactions
-    ?.slice(0, 20)
+    ?.slice(0, 30)
     .map((t: any) =>
       `- ID: ${t.id}, ${t.type.toUpperCase()}: ${t.description} (${t.amount}) on ${t.date.split('T')[0]}`
     ).join('\n');
@@ -38,6 +38,7 @@ RULES:
 - If the user wants to add a transaction request and has provided all mandatory details (either in the current message or via context), respond ONLY with JSON.
 - If the user wants to UPDATE a transaction, look for a matching transaction in the "CONTEXT" section.
 - If the user wants to DELETE a transaction, look for a matching transaction in the "CONTEXT" section.
+- If the user wants to DOWNLOAD a report or PDF, return "download_report".
 - You absolutely MUST find the correct matching ID from the context to update or delete a transaction.
 - If the user says "update lunch" or "delete lunch", and you see a transaction "ID: 123... Lunch", use that ID.
 - If multiple similar transactions exist, ask for clarification (return action "chat").
@@ -76,6 +77,12 @@ FOR DELETING TRANSACTIONS:
   "data": {
     "id": string (MUST match an ID from the CONTEXT)
   }
+}
+
+FOR DOWNLOADING REPORTS:
+{
+  "action": "download_report",
+  "data": {}
 }
 
 CATEGORY RULES:

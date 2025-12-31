@@ -81,7 +81,7 @@ export function ChatWidget({ isOffline = false }: { isOffline?: boolean }) {
             method: "POST",
             body: JSON.stringify({
                 messages: [...messages, userMessage],
-                data: { transactions: transactions.slice(0, 20).map(({ id, amount, description, date, category, type }) => ({ id, amount, description, date, category, type })) }
+                data: { transactions: transactions.slice(0, 30).map(({ id, amount, description, date, category, type }) => ({ id, amount, description, date, category, type })) }
             }),
         });
 
@@ -222,6 +222,20 @@ export function ChatWidget({ isOffline = false }: { isOffline?: boolean }) {
                 }
             }
 
+
+            if (json.action === "download_report") {
+                window.dispatchEvent(new CustomEvent('open-download-options'));
+                setMessages((m) =>
+                    m.map((msg) =>
+                        msg.id === assistantId
+                            ? {
+                                ...msg,
+                                content: "📂 Opening download options..."
+                            }
+                            : msg
+                    )
+                );
+            }
 
             if (json.action === "chat") {
                 setMessages((m) =>

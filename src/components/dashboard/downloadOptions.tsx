@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Transaction } from "@/lib/types";
 import { generatePDF } from "@/lib/pdfGenerator";
 import { Button } from "@/components/ui/button";
@@ -33,6 +33,12 @@ export default function DownloadOptions({ transactions, className }: DownloadOpt
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [isOpen, setIsOpen] = useState(false);
+
+    useEffect(() => {
+        const handleOpen = () => setIsOpen(true);
+        window.addEventListener('open-download-options', handleOpen);
+        return () => window.removeEventListener('open-download-options', handleOpen);
+    }, []);
 
     const handleDownload = () => {
         let filtered = transactions;
