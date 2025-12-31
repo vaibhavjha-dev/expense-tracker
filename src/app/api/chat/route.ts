@@ -4,10 +4,16 @@ import { google } from "@ai-sdk/google";
 export const runtime = "edge";
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  const { messages, data } = await req.json();
+
+  const recentTransactions = data?.transactions
+    ?.slice(0, 20)
+    .map((t: any) =>
+      `- ID: ${t.id}, ${t.type.toUpperCase()}: ${t.description} (${t.amount}) on ${t.date.split('T')[0]}`
+    ).join('\n');
 
   const result = await streamText({
-    model: google("gemini-2.5-flash"),
+    model: google("gemini-3-flash-preview"),
     temperature: 0,
     messages: [
       {
@@ -15,6 +21,9 @@ export async function POST(req: Request) {
         content: `
 You are an expense tracker assistant.
 The current date is ${new Date().toISOString().split('T')[0]}.
+
+CONTEXT - RECENT TRANSACTIONS:
+${recentTransactions || "No recent transactions found."}
 
 ALLOWED CATEGORIES:
 - Income: "salary", "freelance", "investments", "other"
@@ -27,10 +36,16 @@ RULES:
 - Both 'amount' and 'description' are MANDATORY for adding a transaction.
 - If the user tries to add a transaction but is missing the amount or description, do NOT return "add_transaction". Instead, return "chat" and ask for the missing details.
 - If the user wants to add a transaction request and has provided all mandatory details (either in the current message or via context), respond ONLY with JSON.
+- If the user wants to UPDATE a transaction, look for a matching transaction in the "CONTEXT" section.
+- If the user wants to DELETE a transaction, look for a matching transaction in the "CONTEXT" section.
+- You absolutely MUST find the correct matching ID from the context to update or delete a transaction.
+- If the user says "update lunch" or "delete lunch", and you see a transaction "ID: 123... Lunch", use that ID.
+- If multiple similar transactions exist, ask for clarification (return action "chat").
 - Do NOT include markdown.
 - Do NOT explain anything.
-- Use this exact schema for valid transactions:
+- Use this exact schema for valid responses:
 
+FOR ADDING TRANSACTIONS:
 {
   "action": "add_transaction",
   "data": {
@@ -39,6 +54,27 @@ RULES:
     "category": string,
     "type": "income" | "expense",
     "date": "YYYY-MM-DD"
+  }
+}
+
+FOR UPDATING TRANSACTIONS:
+{
+  "action": "update_transaction",
+  "data": {
+    "id": string, (MUST match an ID from the CONTEXT)
+    "amount"?: number,
+    "description"?: string,
+    "category"?: string,
+    "type"?: "income" | "expense",
+    "date"?: "YYYY-MM-DD"
+  }
+}
+
+FOR DELETING TRANSACTIONS:
+{
+  "action": "delete_transaction",
+  "data": {
+    "id": string (MUST match an ID from the CONTEXT)
   }
 }
 

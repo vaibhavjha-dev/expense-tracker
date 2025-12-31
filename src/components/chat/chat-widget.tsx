@@ -22,7 +22,7 @@ export function ChatWidget({ isOffline = false }: { isOffline?: boolean }) {
     const [isOpen, setIsOpen] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
-    const { addTransaction } = useTransactions();
+    const { addTransaction, editTransaction, deleteTransaction, transactions } = useTransactions();
 
     useEffect(() => {
         if (scrollRef.current) {
@@ -81,6 +81,7 @@ export function ChatWidget({ isOffline = false }: { isOffline?: boolean }) {
             method: "POST",
             body: JSON.stringify({
                 messages: [...messages, userMessage],
+                data: { transactions: transactions.slice(0, 20).map(({ id, amount, description, date, category, type }) => ({ id, amount, description, date, category, type })) }
             }),
         });
 
@@ -137,6 +138,88 @@ export function ChatWidget({ isOffline = false }: { isOffline?: boolean }) {
                             : msg
                     )
                 );
+            }
+
+            if (json.action === "update_transaction") {
+                const transactionToUpdate = transactions.find(t => t.id === json.data.id);
+
+                if (transactionToUpdate) {
+                    const updatedTransaction = {
+                        ...transactionToUpdate,
+                        ...json.data,
+                        amount: json.data.amount ?? transactionToUpdate.amount, // Ensure amount is treated as number if updated
+                    };
+
+                    // Remove id from the object passed to editTransaction as it takes id as first arg
+                    const { id, ...dataToUpdate } = updatedTransaction;
+
+                    editTransaction(id, dataToUpdate);
+
+                    toast.success("Transaction updated 📝");
+
+                    setMessages((m) =>
+                        m.map((msg) =>
+                            msg.id === assistantId
+                                ? {
+                                    ...msg,
+                                    content: `✅ Transaction Updated Successfully\n
+                                    Type: ${dataToUpdate.type === "income" ? "Income" : "Expense"}\n
+                                    Amount: ₹${dataToUpdate.amount}\n
+                                    Category: ${dataToUpdate.category}\n
+                                    Description: ${dataToUpdate.description}\n
+                                    Date: ${new Date(dataToUpdate.date).toLocaleDateString()}`
+                                }
+                                : msg
+                        )
+                    );
+                } else {
+                    setMessages((m) =>
+                        m.map((msg) =>
+                            msg.id === assistantId
+                                ? {
+                                    ...msg,
+                                    content: "❌ Could not find the transaction to update."
+                                }
+                                : msg
+                        )
+                    );
+                }
+            }
+
+            if (json.action === "delete_transaction") {
+                const transactionToDelete = transactions.find(t => t.id === json.data.id);
+
+                if (transactionToDelete) {
+                    deleteTransaction(json.data.id);
+
+                    toast.success("Transaction deleted 🗑️");
+
+                    setMessages((m) =>
+                        m.map((msg) =>
+                            msg.id === assistantId
+                                ? {
+                                    ...msg,
+                                    content: `✅ Transaction Deleted Successfully\n
+                                    Type: ${transactionToDelete.type === "income" ? "Income" : "Expense"}\n
+                                    Amount: ₹${transactionToDelete.amount}\n
+                                    Category: ${transactionToDelete.category}\n
+                                    Description: ${transactionToDelete.description}`
+                                }
+                                : msg
+                        )
+                    );
+                } else {
+                    setMessages((m) =>
+                        m.map((msg) =>
+                            msg.id === assistantId
+                                ? {
+                                    ...msg,
+                                    content: "❌ Could not find the transaction to delete."
+                                }
+                                : msg
+                        )
+                    );
+                }
             }
 
 
